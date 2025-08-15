@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEET PG / INICET PYQs</title>
+  <style>
+    /* General styles for the page */
+body {
+  font-family: 'Poppins', sans-serif; /* Playful font */
+  background: linear-gradient(45deg, #FFE1F0, #FFFBEC, #E1F5FE); /* Light pastel gradient background */
+  color: #333; /* Darker text for contrast */
+  padding: 20px;
+  margin: 0;
+}
+
+/* Header styles */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3em;
+  color: #FF80AB; /* Soft pink color */
+  font-family: 'Comic Sans MS', sans-serif;
+  margin: 20px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.top-buttons {
+  text-align: center;
+}
+
+.top-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  padding: 12px 20px;
+  background: #FF80AB; /* Soft pink */
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background: #FF60A3;
+  transform: scale(1.1);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: scale(1);
+}
+
+.info-message {
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #555; /* Darker text for contrast */
+}
+
+.subjects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  padding: 15px;
+  border-radius: 12px; /* Rounded edges for a soft look */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Soft shadows */
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  color: white;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  background: #FFEBEE; /* Light pink background for cards */
+  font-size: 1.1em;
+}
+
+.card:hover {
+  transform: translateY(-10px); /* Floating effect on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card.locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.card-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-sub {
+  margin-top: 8px;
+}
+
+.whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  color: white;
+  padding: 15px;
+  border-radius: 50px;
+  font-size: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+.whatsapp-btn:hover {
+  background-color: #128c7e;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  .subjects {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+
+  .card {
+    font-size: 1em;
+    padding: 12px;
+  }
+
+  button {
+    font-size: 1.2em;
+    width: 100%;
+  }
+
+  .whatsapp-btn {
+    bottom: 15px;
+    right: 15px;
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2em;
+  }
+
+  .info-message {
+    font-size: 1em;
+  }
+
+  .card {
+    font-size: 0.9em;
+    padding: 10px;
+  }
+
+  button {
+    font-size: 1.1em;
+    width: 100%;
+  }
+
+  .whatsapp-btn {
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Main Content -->
+  <!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   NEET PG / INICET PYQs
+  </title>
+  <link href="style.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">
+  </script>
+ </head>
+ <body>
+  <header>
+   <h1>
+    NEET PG / INICET PYQs
+   </h1>
+   <div class="top-buttons">
+    <div class="top-right">
+     <span id="user-info">
+      Loading...
+     </span>
+     <button id="loginBtn" style="display:none">
+      🔐 Login / Sign Up
+     </button>
+     <button id="logoutBtn" style="display:none">
+      🚪 Logout
+     </button>
+    </div>
+    <button id="payBtn" style="margin-top: 10px;">
+     💳 Pay ₹99 to Unlock All Subjects
+    </button>
+   </div>
+  </header>
+  <div class="info-message">
+   🔓
+   <strong>
+    Anatomy
+   </strong>
+   is free. Pay ₹99 once to unlock access to all other subjects.
+   <br/>
+   Please login first to make the payment.
+  </div>
+  <div class="subjects" id="subject-container">
+  </div>
+  <!-- WhatsApp Help Button -->
+  <a class="whatsapp-btn" href="https://wa.me/919431328569" id="whatsappBtn" target="_blank">
+   💬 Chat with us on WhatsApp
+  </a>
+  <script src="https://checkout.razorpay.com/v1/checkout.js">
+  </script>
+  <script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyDohygxGWFCQ-Kn2yROr_cviSUcD0drt0M",
+  authDomain: "nishant-website.firebaseapp.com",
+  projectId: "nishant-website",
+  storageBucket: "nishant-website.firebasestorage.app",
+  messagingSenderId: "92337870765",
+  appId: "1:92337870765:web:664418f551133e356fb324",
+  measurementId: "G-08FZCL9GVS"
+};
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const subjects = [
+      "Anatomy", "Physiology", "Biochemistry", "Pathology", "Pharmacology", "Microbiology", 
+      "Forensic Medicine", "Community Medicine", "ENT", "Ophthalmology", "General Medicine", 
+      "General Surgery", "Obstetrics & Gynaecology", "Pediatrics", "Orthopaedics", "Dermatology", 
+      "Psychiatry", "Respiratory Medicine", "Anesthesiology"
+    ];
+
+    let isPaid = false;
+    let userId = null;
+    let currentUser = null;
+
+    const userInfo = document.getElementById("user-info");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const payBtn = document.getElementById("payBtn");
+
+    // Function to generate a random color for cards
+    function getRandomColor() {
+      const colors = [
+        "#FF5733", "#33FF57", "#3357FF", "#F1C40F", "#9B59B6", "#1ABC9C", "#E74C3C", "#8E44AD", "#3498DB"
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function renderSubjects() {
+      const container = document.getElementById("subject-container");
+      container.innerHTML = "";
+      subjects.forEach(subject => {
+        const card = document.createElement("a");
+        card.className = "card";
+        const isFree = subject === "Anatomy";
+        const locked = !isFree && !isPaid;
+        card.classList.toggle("locked", locked);
+        card.style.backgroundColor = getRandomColor(); // Apply random color
+
+        card.innerHTML = `
+          <div class="card-title">${subject}</div>
+          <div class="card-sub">${locked ? "🔒 Locked" : "✅ Open"}</div>
+        `;
+        if (!locked) {
+          card.href = `quiz.html?subject=${encodeURIComponent(subject)}`;
+        } else {
+          card.onclick = (e) => {
+            e.preventDefault();
+            alert("🔒 This subject is locked. Please login and pay ₹99 to unlock all subjects.");
+          };
+        }
+        container.appendChild(card);
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        userId = user.uid;
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        userInfo.textContent = `👋 ${user.email}`;
+
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const snap = await getDoc(docRef);
+
+          if (user.email === "y3knishu@gmail.com") {
+            console.log("✅ Admin override access granted");
+            isPaid = true;
+            payBtn.style.display = "none";
+          } else if (snap.exists() && snap.data().isPaid) {
+            isPaid = true;
+            payBtn.style.display = "none";
+          } else {
+            isPaid = false;
+            payBtn.style.display = "inline-block";
+          }
+        } catch (e) {
+          console.warn("Error checking payment status:", e);
+        }
+
+        renderSubjects();
+      } else {
+        currentUser = null;
+        userInfo.textContent = "🔐 Not logged in";
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+        isPaid = false;
+        payBtn.style.display = "inline-block";
+        renderSubjects();
+      }
+    });
+
+    loginBtn.onclick = () => {
+      window.location.href = "admin-login.html";
+    };
+
+    logoutBtn.onclick = () => {
+      signOut(auth).then(() => {
+        alert("Logged out");
+        window.location.reload();
+      });
+    };
+
+    payBtn.onclick = function () {
+      if (!currentUser) {
+        alert("🔐 Please login first to make payment.");
+        return;
+      }
+      const options = {
+        key: "rzp_live_7nZptAUoDrsfRb",
+        amount: 9900,
+        currency: "INR",
+        name: "NEET PG / INICET PREVIOUSLY ASKED QUESTIONS",
+        description: "Unlock all subjects",
+        handler: async function (response) {
+          alert("✅ Payment successful! ID: " + response.razorpay_payment_id);
+          await setDoc(doc(db, "users", userId), { isPaid: true }, { merge: true });
+          isPaid = true;
+          payBtn.style.display = "none";
+          renderSubjects();
+        },
+        theme: {
+          color: "#3399cc"
+        }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    };
+  </script>
+  <!-- Disable Right-click functionality -->
+  <script>
+   document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      alert('Right-click is disabled on this page!');
+    });
+  </script>
+  <!-- WhatsApp Help Button -->
+  <a class="whatsapp-btn" href="https://wa.me/919431328569" id="whatsappBtn" target="_blank">
+   💬 Chat with us on WhatsApp
+  </a>
+ </body>
+</html>
+
+
+  <!-- Admin Panel Content -->
+  <!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Admin Panel
+  </title>
+  <style>
+   body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    #admin-section {
+      display: none;
+    }
+    textarea, input, select, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+    .question-item {
+      background: #fff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+ </head>
+ <body>
+  <h2>
+   Admin Login
+  </h2>
+  <div id="login-section">
+   <input id="admin-email" placeholder="Email" type="email"/>
+   <input id="admin-password" placeholder="Password" type="password"/>
+   <button onclick="adminLogin()">
+    Login with Email
+   </button>
+   <button onclick="loginWithGoogle()">
+    Login with Google
+   </button>
+  </div>
+  <div id="admin-section">
+   <h2>
+    Admin Panel - Upload MCQs
+   </h2>
+   <button onclick="logout()">
+    Logout
+   </button>
+   <select id="subject">
+    <option disabled="" selected="">
+     Select Subject
+    </option>
+    <option>
+     Anatomy
+    </option>
+    <option>
+     Physiology
+    </option>
+    <option>
+     Biochemistry
+    </option>
+    <option>
+     Pathology
+    </option>
+    <option>
+     Pharmacology
+    </option>
+    <option>
+     Microbiology
+    </option>
+    <option>
+     Forensic Medicine
+    </option>
+    <option>
+     Community Medicine
+    </option>
+    <option>
+     ENT
+    </option>
+    <option>
+     Ophthalmology
+    </option>
+    <option>
+     General Medicine
+    </option>
+    <option>
+     General Surgery
+    </option>
+    <option>
+     Obstetrics &amp; Gynaecology
+    </option>
+    <option>
+     Pediatrics
+    </option>
+    <option>
+     Orthopaedics
+    </option>
+    <option>
+     Dermatology
+    </option>
+    <option>
+     Psychiatry
+    </option>
+    <option>
+     Respiratory Medicine
+    </option>
+    <option>
+     Anesthesiology
+    </option>
+   </select>
+   <textarea id="question" placeholder="Enter question"></textarea>
+   <input id="opt1" placeholder="Option 1"/>
+   <input id="opt2" placeholder="Option 2"/>
+   <input id="opt3" placeholder="Option 3"/>
+   <input id="opt4" placeholder="Option 4"/>
+   <input id="correct" placeholder="Correct option number (0-3)"/>
+   <input id="image" placeholder="Image URL (optional)"/>
+   <button onclick="uploadQuestion()">
+    Upload Question
+   </button>
+   <button onclick="loadQuestions()">
+    Load All Questions
+   </button>
+   <button onclick="exportQuestions()">
+    Export Questions as JSON
+   </button>
+   <input id="importFile" type="file"/>
+   <button onclick="importQuestions()">
+    Import JSON
+   </button>
+   <p id="questionCount">
+   </p>
+   <div id="preview">
+   </div>
+  </div>
+  <script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      signOut,
+      GoogleAuthProvider
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyDohygxGWFCQ-Kn2yROr_cviSUcD0drt0M",
+  authDomain: "nishant-website.firebaseapp.com",
+  projectId: "nishant-website",
+  storageBucket: "nishant-website.firebasestorage.app",
+  messagingSenderId: "92337870765",
+  appId: "1:92337870765:web:664418f551133e356fb324",
+  measurementId: "G-08FZCL9GVS"
+};
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.adminLogin = function () {
+      const email = document.getElementById("admin-email").value;
+      const password = document.getElementById("admin-password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then((user) => {
+          if (email === "y3knishu@gmail.com") {
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("admin-section").style.display = "block";
+          } else {
+            alert("❌ Not authorized");
+          }
+        })
+        .catch((err) => alert("Login failed: " + err.message));
+    };
+
+    window.loginWithGoogle = function () {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const email = result.user.email;
+          if (email === "y3knishu@gmail.com") {
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("admin-section").style.display = "block";
+          } else {
+            alert("❌ Not authorized");
+          }
+        })
+        .catch((error) => {
+          alert("Google Sign-In failed: " + error.message);
+        });
+    };
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        alert("Logged out");
+        location.reload();
+      });
+    };
+
+    window.uploadQuestion = async function () {
+      const subject = document.getElementById("subject").value;
+      const question = document.getElementById("question").value;
+      const options = [
+        document.getElementById("opt1").value,
+        document.getElementById("opt2").value,
+        document.getElementById("opt3").value,
+        document.getElementById("opt4").value
+      ];
+      const answer = parseInt(document.getElementById("correct").value);
+      const image = document.getElementById("image").value;
+
+      if (!subject || !question || options.includes("") || isNaN(answer)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      const newQ = { question, options, answer };
+      if (image) newQ.image = image;
+
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+      let existing = [];
+      if (docSnap.exists()) {
+        existing = docSnap.data().questions || [];
+      }
+      existing.push(newQ);
+      await setDoc(docRef, { questions: existing });
+
+      alert("✅ Question uploaded!");
+      document.getElementById("question").value = "";
+      document.getElementById("opt1").value = "";
+      document.getElementById("opt2").value = "";
+      document.getElementById("opt3").value = "";
+      document.getElementById("opt4").value = "";
+      document.getElementById("correct").value = "";
+      document.getElementById("image").value = "";
+    };
+
+    window.loadQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+      const preview = document.getElementById("preview");
+      const countBox = document.getElementById("questionCount");
+      preview.innerHTML = "";
+      countBox.textContent = "";
+
+      if (docSnap.exists()) {
+        const questions = docSnap.data().questions || [];
+        countBox.textContent = `📊 Total Questions: ${questions.length}`;
+        questions.forEach((q, index) => {
+          const div = document.createElement("div");
+          div.className = "question-item";
+          div.innerHTML = `
+            <b>Q${index + 1}:</b> ${q.question}<br/>
+            Options: ${q.options.join(", ")}<br/>
+            Answer: ${q.answer}<br/>
+            ${q.image ? `<img src="${q.image}" />` : ""}
+            <button onclick="deleteQuestion(${index})">Delete</button>
+          `;
+          preview.appendChild(div);
+        });
+      } else {
+        preview.innerHTML = "No questions found.";
+      }
+    };
+
+    window.deleteQuestion = async function (index) {
+      const subject = document.getElementById("subject").value;
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) return;
+      const questions = docSnap.data().questions;
+      questions.splice(index, 1);
+      await setDoc(docRef, { questions });
+      loadQuestions();
+    };
+
+    window.exportQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      if (!subject) return alert("Select subject");
+
+      const snap = await getDoc(doc(db, "questions", subject));
+      if (!snap.exists()) return alert("No data found");
+
+      const data = snap.data().questions || [];
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${subject}-questions.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    window.importQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      const input = document.getElementById("importFile");
+      if (!subject || !input.files.length) return alert("Select subject and choose a JSON file");
+
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imported = JSON.parse(e.target.result);
+        const docRef = doc(db, "questions", subject);
+        const docSnap = await getDoc(docRef);
+        let existing = [];
+        if (docSnap.exists()) {
+          existing = docSnap.data().questions || [];
+        }
+        await setDoc(docRef, { questions: [...existing, ...imported] });
+        alert("✅ Imported successfully!");
+        loadQuestions();
+      };
+      reader.readAsText(file);
+    };
+  </script>
+ </body>
+</html>
+
+
+  <!-- Quiz Page Content -->
+  <!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Quiz
+  </title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      margin: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark {
+      background: #121212;
+      color: #eee;
+    }
+    .sidebar {
+      width: 100px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .dark .sidebar {
+      background: #1e1e1e;
+      border-color: #444;
+    }
+    #palette button {
+      margin: 5px;
+      width: 40px;
+      height: 40px;
+    }
+    .main {
+      padding: 20px;
+      flex: 1;
+    }
+    .question { font-size: 1.1em; margin-bottom: 10px; }
+    .image { max-width: 100%; margin-bottom: 20px; display: none; }
+    .options button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      font-size: 1em;
+    }
+    .correct { background: #c8e6c9; }
+    .wrong { background: #ffcdd2; }
+    .summary {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f4f4f4;
+      border-radius: 8px;
+    }
+    .dark .summary {
+      background: #2b2b2b;
+    }
+    #toggle-dark {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">
+  </script>
+ </head>
+ <body class="dark">
+  <div class="sidebar">
+   <h4>
+    Palette
+   </h4>
+   <div id="palette">
+   </div>
+  </div>
+  <div class="main">
+   <div id="question-number">
+   </div>
+   <div class="question" id="question-text">
+   </div>
+   <img class="image" id="question-image"/>
+   <div class="options" id="options">
+   </div>
+   <p id="timer">
+    Time: 0 sec
+   </p>
+   <button onclick="prevQuestion()">
+    ⬅️ Prev
+   </button>
+   <button onclick="nextQuestion()">
+    Next ➡️
+   </button>
+   <button onclick="submitQuiz()">
+    ✅ Submit Quiz
+   </button>
+   <button onclick="resetQuiz()">
+    🔄 Retry
+   </button>
+   <button onclick="location.href='index.html'">
+    🏠 Home
+   </button>
+   <div class="summary" id="result-summary">
+   </div>
+  </div>
+  <button id="toggle-dark" onclick="toggleDarkMode()">
+   ☀️
+  </button>
+  <script>
+   // Restore saved dark mode
+    if (localStorage.getItem("dark") === "false") {
+      document.body.classList.remove("dark");
+      document.getElementById("toggle-dark").textContent = "🌙";
+    }
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("dark", isDark);
+      document.getElementById("toggle-dark").textContent = isDark ? "☀️" : "🌙";
+    }
+  </script>
+  <script src="app.js" type="module">
+  </script>
+ </body>
+</html>
+
+
+  <script>
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDohygxGWFCQ-Kn2yROr_cviSUcD0drt0M",
+  authDomain: "nishant-website.firebaseapp.com",
+  projectId: "nishant-website",
+  storageBucket: "nishant-website.firebasestorage.app",
+  messagingSenderId: "92337870765",
+  appId: "1:92337870765:web:664418f551133e356fb324",
+  measurementId: "G-08FZCL9GVS"
+};
+  apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+  authDomain: "mcqs-96117.firebaseapp.com",
+  projectId: "mcqs-96117",
+  storageBucket: "mcqs-96117.firebasestorage.app",
+  messagingSenderId: "352256319143",
+  appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+  measurementId: "G-6FZ770H045"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+// Variables
+const urlParams = new URLSearchParams(window.location.search);
+const subject = urlParams.get('subject') || 'Anatomy';
+
+let questions = [];
+let current = 0;
+let selectedAnswers = [];
+let startTime = Date.now();
+let timerInterval;
+
+// DOM Elements
+const qText = document.getElementById("question-text");
+const qImage = document.getElementById("question-image");
+const qOptions = document.getElementById("options");
+const qNumber = document.getElementById("question-number");
+const palette = document.getElementById("palette");
+const resultDiv = document.getElementById("result-summary");
+const timer = document.getElementById("timer");
+
+// Disable right-click functionality
+document.addEventListener('contextmenu', function(event) {
+  event.preventDefault();
+  alert('Right-click is disabled on this page!');
+});
+
+// Listen for auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is signed in with UID:", user.uid);
+    loadProgress(user.uid);  // Load progress when user is logged in
+    loadQuiz(subject, user.uid); // Load quiz for this subject when logged in
+  } else {
+    console.log("User is not signed in.");
+    loadQuiz(subject); // Load quiz even if the user is not signed in (default subject)
+  }
+});
+
+function renderPalette() {
+  palette.innerHTML = "";
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = i + 1;
+    btn.onclick = () => loadQuestion(i);
+    if (selectedAnswers[i] !== undefined) {
+      btn.style.background = selectedAnswers[i].correct ? "#66bb6a" : "#ef5350";
+    }
+    palette.appendChild(btn);
+  });
+}
+
+function loadQuestion(index) {
+  current = index;
+  const q = questions[index];
+  qNumber.textContent = `Question ${index + 1}`;
+  qText.textContent = q.question;
+  qImage.style.display = q.image ? "block" : "none";
+  qImage.src = q.image || "";
+  qOptions.innerHTML = "";
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i, btn);
+    qOptions.appendChild(btn);
+  });
+
+  if (selectedAnswers[index] !== undefined) {
+    const correctIndex = q.answer;
+    const selected = selectedAnswers[index].selectedIndex;
+    const buttons = qOptions.querySelectorAll("button");
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correctIndex) b.classList.add("correct");
+      if (i === selected && selected !== correctIndex) b.classList.add("wrong");
+    });
+  }
+
+  renderPalette();
+}
+
+function selectAnswer(selectedIndex, btn) {
+  const q = questions[current];
+  const isCorrect = selectedIndex === q.answer;
+  selectedAnswers[current] = { selectedIndex, correct: isCorrect };
+
+  const buttons = qOptions.querySelectorAll("button");
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.answer) b.classList.add("correct");
+    if (i === selectedIndex && !isCorrect) b.classList.add("wrong");
+  });
+
+  saveProgress(auth.currentUser ? auth.currentUser.uid : null); // Save progress if user is logged in
+  renderPalette();
+}
+
+function prevQuestion() {
+  if (current > 0) loadQuestion(current - 1);
+}
+function nextQuestion() {
+  if (current < questions.length - 1) loadQuestion(current + 1);
+}
+function resetQuiz() {
+  selectedAnswers = [];
+  saveProgress(auth.currentUser ? auth.currentUser.uid : null); // Save progress if user is logged in
+  loadQuestion(0);
+  resultDiv.innerHTML = "";
+  startTime = Date.now();
+}
+function submitQuiz() {
+  let correct = 0, wrong = 0, attempted = 0;
+  selectedAnswers.forEach(a => {
+    if (a !== undefined) {
+      attempted++;
+      if (a.correct) correct++;
+      else wrong++;
+    }
+  });
+  const unattempted = questions.length - attempted;
+  const score = correct * 4 - wrong;
+
+  const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(timeTaken / 60);
+  const seconds = timeTaken % 60;
+
+  resultDiv.innerHTML = `
+    <h3>Quiz Summary</h3>
+    <p>✅ Correct: ${correct}</p>
+    <p>❌ Wrong: ${wrong}</p>
+    <p>⏳ Unattempted: ${unattempted}</p>
+    <p>🧮 Score: ${score} / ${questions.length * 4}</p>
+    <p>⏱️ Time Taken: ${minutes} min ${seconds} sec</p>
+    <canvas id="resultChart" width="300" height="300"></canvas>
+  `;
+
+  new Chart(document.getElementById("resultChart"), {
+    type: "pie",
+    data: {
+      labels: ["Correct", "Wrong", "Unattempted"],
+      datasets: [{
+        data: [correct, wrong, unattempted],
+        backgroundColor: ["#66bb6a", "#ef5350", "#ffee58"]
+      }]
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: {
+          position: "bottom"
+        }
+      }
+    }
+  });
+
+  clearInterval(timerInterval);
+  renderPalette();
+}
+
+function updateTimer() {
+  const diff = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(diff / 60);
+  const secs = diff % 60;
+  timer.textContent = `Time: ${mins}m ${secs}s`;
+}
+
+// Save user progress in Firestore
+async function saveProgress(userId) {
+  if (!userId) return; // Don't save progress if no user is logged in
+
+  const key = `progress_${subject}`;
+  const summary = {
+    attempted: selectedAnswers.filter(a => a !== undefined).length,  // Count only defined answers
+    correct: selectedAnswers.filter(a => a && a.correct).length,
+    wrong: selectedAnswers.filter(a => a && !a.correct).length,
+    total: questions.length,
+    answers: selectedAnswers.filter(a => a !== undefined), // Filter out undefined answers
+    timestamp: new Date().toISOString()  // Save timestamp
+  };
+
+  // Make sure summary.answers is an array and not undefined or null
+  if (summary.answers === undefined || summary.answers === null) {
+    console.error('Invalid progress data, answers are undefined or null');
+    return;
+  }
+
+  const userProgressRef = doc(db, "user_progress", userId);
+  try {
+    await setDoc(userProgressRef, {
+      [key]: summary
+    });
+    console.log('Progress saved to Firebase for user:', userId);
+  } catch (error) {
+    console.error('Error saving progress:', error);
+  }
+}
+
+// Load user progress from Firestore
+async function loadProgress(userId) {
+  if (!userId) return; // Skip loading progress if user is not logged in
+
+  const key = `progress_${subject}`;
+  const userProgressRef = doc(db, "user_progress", userId);
+  const userProgressSnap = await getDoc(userProgressRef);
+
+  if (userProgressSnap.exists()) {
+    const userProgress = userProgressSnap.data();
+    const savedProgress = userProgress[key];
+
+    if (savedProgress) {
+      selectedAnswers = savedProgress.answers || [];
+      console.log('Progress loaded from Firebase:', savedProgress);
+    } else {
+      console.log('No progress data found for this subject.');
+    }
+  } else {
+    console.log('No progress found for this user.');
+  }
+}
+
+// Load quiz questions from Firestore
+async function loadQuiz(subjectName, userId = null) {
+  const docRef = doc(db, "questions", subjectName);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    questions = docSnap.data().questions;
+    selectedAnswers = new Array(questions.length); // Initialize selected answers array
+    if (userId) {
+      loadProgress(userId); // Load user's progress if logged in
+    }
+    loadQuestion(0); // Load first question
+    timerInterval = setInterval(updateTimer, 1000); // Start timer
+  } else {
+    alert("No questions found for this subject.");
+  }
+}
+
+window.prevQuestion = prevQuestion;
+window.nextQuestion = nextQuestion;
+window.resetQuiz = resetQuiz;
+window.submitQuiz = submitQuiz;
+window.toggleDarkMode = toggleDarkMode;
+
+  </script>
+</body>
+</html>
