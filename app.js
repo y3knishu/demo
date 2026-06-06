@@ -245,8 +245,9 @@ function showExplanation(q){
 
   expBox.style.display = "block";
 
-  expTitle.style.display = "block";
-
+if(expTitle){
+   expTitle.style.display = "block";
+}
   expText.innerHTML =
     q.explanation
       ? q.explanation
