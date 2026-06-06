@@ -53,18 +53,38 @@ onAuthStateChanged(auth, (user) => {
 });
 
 function renderPalette() {
+
   palette.innerHTML = "";
+
   questions.forEach((_, i) => {
+
     const btn = document.createElement("button");
+
     btn.textContent = i + 1;
-    btn.onclick = () => loadQuestion(i);
+
+    btn.classList.add("palette-btn");
+
+    if (i === current) {
+      btn.classList.add("current");
+    }
 
     if (selectedAnswers[i] !== undefined) {
-      btn.style.background = selectedAnswers[i].correct ? "#66bb6a" : "#ef5350";
+      btn.classList.add("answered");
     }
+
+    btn.onclick = () => loadQuestion(i);
 
     palette.appendChild(btn);
   });
+
+  document.getElementById("answeredCount").textContent =
+    `Answered : ${selectedAnswers.filter(a => a !== undefined).length}`;
+
+  document.getElementById("notAnsweredCount").textContent =
+    `Not Answered : ${questions.length - selectedAnswers.filter(a => a !== undefined).length}`;
+
+  document.getElementById("totalCount").textContent =
+    `Total Questions : ${questions.length}`;
 }
 
 function loadQuestion(index) {
