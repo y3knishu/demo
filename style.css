@@ -1,0 +1,270 @@
+/* General styles for the page */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(45deg, #FFE1F0, #FFFBEC, #E1F5FE);
+  color: #333;
+  padding: 20px;
+  margin: 0;
+}
+
+/* Header styles */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3em;
+  color: #FF80AB;
+  font-family: 'Comic Sans MS', sans-serif;
+  margin: 20px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-buttons {
+  text-align: center;
+}
+
+.top-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  padding: 12px 20px;
+  background: #FF80AB;
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background: #FF60A3;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(1);
+}
+
+.info-message {
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.subjects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s;
+  text-decoration: none;
+  color: white;
+  text-align: center;
+  background: #FFEBEE;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+
+.card.locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.card-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-sub {
+  margin-top: 8px;
+}
+
+/* WhatsApp button */
+.whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  color: white;
+  padding: 15px;
+  border-radius: 50px;
+  font-size: 16px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  text-decoration: none;
+}
+
+.whatsapp-btn:hover {
+  background-color: #128c7e;
+}
+
+/* ========================= */
+/* QUIZ PAGE STYLES */
+/* ========================= */
+
+/* Layout */
+.main {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Question */
+.question {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Question image */
+.image {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Options */
+.options button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  color: #333;
+  font-size: 1em;
+  transition: 0.2s;
+}
+
+.options button:hover {
+  background: #f0f0f0;
+}
+
+/* Answer colors */
+.correct {
+  background: #c8e6c9 !important;
+  border-color: #4caf50;
+}
+
+.wrong {
+  background: #ffcdd2 !important;
+  border-color: #f44336;
+}
+
+/* Explanation styling (no box) */
+#explanation-box {
+  margin-top: 20px;
+}
+
+#explanation-title{
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#explanation-text{
+  line-height: 1.5;
+}
+
+/* Explanation image */
+#explanation-image {
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Timer */
+#timer {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Sidebar palette */
+.sidebar {
+  width: 100px;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+
+#palette button {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: none;
+  margin: 4px;
+  background: #e0e0e0;
+}
+
+#palette button:hover {
+  background: #bdbdbd;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #palette button {
+    margin: 4px;
+  }
+
+  .main {
+    margin-top: 10px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 2em;
+  }
+
+  .card {
+    font-size: 0.9em;
+    padding: 10px;
+  }
+
+  button {
+    font-size: 1em;
+  }
+
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .rainbow-bg {
+      background: linear-gradient(270deg, #ff6b6b, #f7b733, #ffd93d, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #ff6b6b);
+      background-size: 1600% 1600%;
+      animation: rainbow 18s ease infinite;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .glass {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+  </style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getAuth, signInWithEmailAndPassword, GoogleAuthProvider, 
+      signInWithPopup, onAuthStateChanged, signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Email login
+    window.emailLogin = function() {
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPassword").value;
+      signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
+    }
+
+    // Google login with Popup
+    window.googleLogin = function() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log("Google Login Success:", result.user);
+        })
+        .catch((error) => {
+          console.error("Google Login Error:", error);
+          alert(error.message);
+        });
+    }
+
+    // Logout
+    window.logout = function() {
+      signOut(auth);
+      document.getElementById("login-section").style.display = "block";
+      document.getElementById("admin-section").style.display = "none";
+    }
+
+    // Auth state listener
+    onAuthStateChanged(auth, user => {
+      if (user && user.email === "y3knishu@gmail.com") {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("admin-section").style.display = "block";
+        loadUsers();
+      } else if (user) {
+        alert("Access denied. Not admin.");
+        signOut(auth);
+      }
+    });
+
+    // Add new user
+    window.addUser = async function() {
+      const userId = document.getElementById("newUserId").value.trim();
+      const email = document.getElementById("newUserEmail").value.trim();
+      const phone = document.getElementById("newUserPhone").value.trim();
+      const paidStatus = document.getElementById("newUserPaid").value;
+
+      if (!userId) { alert("User ID is required"); return; }
+
+      let dataToSave = {};
+      if (email) dataToSave.email = email;
+      if (phone) dataToSave.phone = phone;
+      if (paidStatus) { dataToSave.isPaid = paidStatus === "Paid"; }
+
+      await setDoc(doc(db, "users", userId), dataToSave, { merge: true });
+      alert("User added/updated successfully");
+      document.getElementById("newUserId").value = "";
+      document.getElementById("newUserEmail").value = "";
+      document.getElementById("newUserPhone").value = "";
+      document.getElementById("newUserPaid").value = "";
+      loadUsers();
+    }
+
+    // Load users
+    async function loadUsers() {
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach(docSnap => {
+        const user = docSnap.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class='p-2 border'>${docSnap.id}</td>
+          <td class='p-2 border'>${user.email || ""}</td>
+          <td class='p-2 border'>${user.phone || ""}</td>
+          <td class='p-2 border'>${user.isPaid ? "Paid" : "Unpaid"}</td>
+          <td class='p-2 border'>
+            <select onchange="updatePaymentStatus('${docSnap.id}', this.value)" class='p-1 rounded'>
+              <option value="Paid" ${user.isPaid ? "selected" : ""}>Paid</option>
+              <option value="Unpaid" ${!user.isPaid ? "selected" : ""}>Unpaid</option>
+            </select>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Update payment status
+    window.updatePaymentStatus = async function(userId, status) {
+      const isPaid = status === "Paid";  
+      await setDoc(doc(db, "users", userId), { isPaid }, { merge: true });
+    }
+  </script>
+</head>
+<body class="rainbow-bg min-h-screen flex items-center justify-center p-4">
+  <div class="glass w-full max-w-4xl">
+    <div id="login-section" class="space-y-4">
+      <h2 class="text-2xl font-bold text-white text-center">Admin Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" class="w-full p-2 rounded" />
+      <input type="password" id="loginPassword" placeholder="Password" class="w-full p-2 rounded" />
+      <button onclick="emailLogin()" class="w-full bg-blue-500 text-white py-2 rounded">Login with Email</button>
+      <button onclick="googleLogin()" class="w-full bg-red-500 text-white py-2 rounded">Login with Google</button>
+    </div>
+
+    <div id="admin-section" style="display:none;" class="space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-white">Admin Dashboard</h2>
+        <button onclick="logout()" class="bg-gray-800 text-white px-3 py-1 rounded">Logout</button>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-lg font-semibold text-white">Add New User</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+          <input type="text" id="newUserId" placeholder="User ID" class="p-2 rounded" />
+          <input type="email" id="newUserEmail" placeholder="Email" class="p-2 rounded" />
+          <input type="text" id="newUserPhone" placeholder="Phone" class="p-2 rounded" />
+          <select id="newUserPaid" class="p-2 rounded">
+            <option value="">Payment Status</option>
+            <option value="Paid">Paid</option>
+            <option value="Unpaid">Unpaid</option>
+          </select>
+        </div>
+        <button onclick="addUser()" class="bg-green-500 text-white px-4 py-2 rounded">Add User</button>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-2">All Users</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-white border" id="usersTable">
+            <thead>
+              <tr>
+                <th class="p-2 border">User ID</th>
+                <th class="p-2 border">Email</th>
+                <th class="p-2 border">Phone</th>
+                <th class="p-2 border">Payment Status</th>
+                <th class="p-2 border">Change Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

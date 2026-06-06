@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visits Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    #loginSection, #dashboard { width: 90%; max-width: 1000px; margin-top: 20px; }
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    input, button {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin: 5px;
+    }
+    button {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    th { background: rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+  <header>📊 Visits Analytics Dashboard</header>  <!-- Login Section -->  <div id="loginSection" class="card">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="emailLogin()">Login with Email</button>
+    <button onclick="googleLogin()">Login with Google</button>
+  </div>  <!-- Dashboard Section -->  <div id="dashboard" style="display:none;">
+    <div class="card">
+      <button onclick="logout()">Logout</button>
+      <h2>Total Visitors: <span id="totalVisitors">0</span></h2>
+    </div><div class="card">
+  <h3>📅 Search Visits by Date</h3>
+  <input type="date" id="datePicker"> 
+  <button onclick="searchDate()">Search</button>
+  <div id="searchResult"></div>
+</div>
+
+<div class="card">
+  <h3>📈 Daily Visits Chart</h3>
+  <canvas id="visitsChart"></canvas>
+</div>
+
+<div class="card">
+  <h3>📋 Visits Table</h3>
+  <table id="visitsTable">
+    <thead>
+      <tr><th>Date</th><th>Visitors</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="card" style="text-align:center;">
+  <button onclick="downloadPDF()">📑 Download PDF Report</button>
+</div>
+
+  </div>  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let visitsData = {};
+    let chart;
+
+    async function loadVisits() {
+      const snapshot = await getDocs(collection(db, "visits"));
+      visitsData = {};
+      let total = 0;
+      snapshot.forEach(doc => {
+        visitsData[doc.id] = doc.data().count;
+        total += doc.data().count;
+      });
+      document.getElementById("totalVisitors").textContent = total;
+      renderTable();
+      renderChart();
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector("#visitsTable tbody");
+      tbody.innerHTML = "";
+      Object.keys(visitsData).sort().forEach(date => {
+        tbody.innerHTML += `<tr><td>${date}</td><td>${visitsData[date]}</td></tr>`;
+      });
+    }
+
+    function renderChart() {
+      const ctx = document.getElementById("visitsChart");
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: Object.keys(visitsData).sort(),
+          datasets: [{
+            label: "Visitors",
+            data: Object.keys(visitsData).sort().map(d => visitsData[d]),
+            borderColor: "#fff",
+            backgroundColor: "rgba(255,255,255,0.3)",
+            fill: true
+          }]
+        },
+        options: { responsive: true }
+      });
+    }
+
+    window.searchDate = function() {
+      const date = document.getElementById("datePicker").value;
+      if (visitsData[date]) {
+        document.getElementById("searchResult").innerText = `Visitors on ${date}: ${visitsData[date]}`;
+      } else {
+        document.getElementById("searchResult").innerText = "No data found for this date.";
+      }
+    }
+
+    window.downloadPDF = function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Visits Report", 10, 10);
+
+      let y = 20;
+      Object.keys(visitsData).sort().forEach(date => {
+        doc.text(`${date}: ${visitsData[date]}`, 10, y);
+        y += 10;
+      });
+
+      doc.text(`Total Visitors: ${document.getElementById("totalVisitors").textContent}`, 10, y+10);
+      doc.save("visits_report.pdf");
+    }
+
+    window.emailLogin = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password).then(userCredential => {
+        if (userCredential.user.email === "y3knishu@gmail.com") {
+          document.getElementById("loginSection").style.display = "none";
+          document.getElementById("dashboard").style.display = "block";
+          loadVisits();
+        } else {
+          alert("Access denied!");
+          signOut(auth);
+        }
+      }).catch(err => alert(err.message));
+    }
+
+    window.googleLogin = function() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then(result => {
+        if (result.user.email === "y3knishu@gmail.com") {
+          document.getElementById("loginSection").style.display = "none";
+          document.getElementById("dashboard").style.display = "block";
+          loadVisits();
+        } else {
+          alert("Access denied!");
+          signOut(auth);
+        }
+      }).catch(err => alert(err.message));
+    }
+
+    window.logout = function() {
+      signOut(auth).then(() => {
+        document.getElementById("loginSection").style.display = "block";
+        document.getElementById("dashboard").style.display = "none";
+      });
+    }
+  </script></body>
+</html>

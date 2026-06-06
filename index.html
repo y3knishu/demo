@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEET PG / INICET PYQs</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6FZ770H045"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6FZ770H045');
+  </script>
+</head>
+<body>
+  <header>
+    <h1>NEET PG / INICET PYQs</h1>
+    <div class="top-buttons">
+      <div class="top-right">
+        <span id="user-info">Loading...</span>
+        <button id="loginBtn" style="display:none">🔐 Login / Sign Up</button>
+        <button id="logoutBtn" style="display:none">🚪 Logout</button>
+      </div>
+      <button id="payBtn" style="margin-top: 10px;">💳 Pay ₹99 to Unlock All Subjects</button>
+    </div>
+  </header>
+
+  <div class="info-message">
+    🔓 <strong>Anatomy</strong> is free. Pay ₹99 once to unlock access to all other subjects.<br>
+    Please login first to make the payment.
+  </div>
+
+  <div id="subject-container" class="subjects"></div>
+
+  <!-- WhatsApp Help Button -->
+  <a href="https://wa.me/919431328569" target="_blank" id="whatsappBtn" class="whatsapp-btn">
+    💬 Chat with us on WhatsApp
+  </a>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { 
+      getAuth, onAuthStateChanged, signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // ✅ Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // ✅ Subjects
+    const subjects = [
+      "Anatomy", "Physiology", "Biochemistry", "Pathology", "Pharmacology", "Microbiology", 
+      "Forensic Medicine", "Community Medicine", "ENT", "Ophthalmology", "General Medicine", 
+      "General Surgery", "Obstetrics & Gynaecology", "Pediatrics", "Orthopaedics", "Dermatology", 
+      "Psychiatry", "Radiology", "Anesthesiology"
+    ];
+
+    let isPaid = false;
+    let userId = null;
+    let currentUser = null;
+
+    const userInfo = document.getElementById("user-info");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const payBtn = document.getElementById("payBtn");
+
+    // ✅ Random card colors
+    function getRandomColor() {
+      const colors = [
+        "#FF5733", "#33FF57", "#3357FF", "#F1C40F", "#9B59B6", 
+        "#1ABC9C", "#E74C3C", "#8E44AD", "#3498DB"
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // ✅ Render Subjects
+    function renderSubjects() {
+      const container = document.getElementById("subject-container");
+      container.innerHTML = "";
+      subjects.forEach(subject => {
+        const card = document.createElement("a");
+        card.className = "card";
+        const isFree = subject === "Anatomy";
+        const locked = !isFree && !isPaid;
+        card.classList.toggle("locked", locked);
+        card.style.backgroundColor = getRandomColor();
+
+        card.innerHTML = `
+          <div class="card-title">${subject}</div>
+          <div class="card-sub">${locked ? "🔒 Locked" : "✅ Open"}</div>
+        `;
+        if (!locked) {
+          card.href = `quiz.html?subject=${encodeURIComponent(subject)}`;
+        } else {
+          card.onclick = (e) => {
+            e.preventDefault();
+            alert("🔒 This subject is locked. Please login and pay ₹99 to unlock all subjects.");
+          };
+        }
+        container.appendChild(card);
+      });
+    }
+
+    // ✅ Auth State
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        userId = user.uid;
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        userInfo.textContent = `👋 ${user.email}`;
+
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const snap = await getDoc(docRef);
+
+          if (user.email === "y3knishu@gmail.com") {
+            console.log("✅ Admin override access granted");
+            isPaid = true;
+            payBtn.style.display = "none";
+          } else if (snap.exists() && snap.data().isPaid) {
+            isPaid = true;
+            payBtn.style.display = "none";
+          } else {
+            isPaid = false;
+            payBtn.style.display = "inline-block";
+          }
+        } catch (e) {
+          console.warn("Error checking payment status:", e);
+        }
+
+        renderSubjects();
+      } else {
+        currentUser = null;
+        userInfo.textContent = "🔐 Not logged in";
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+        isPaid = false;
+        payBtn.style.display = "inline-block";
+        renderSubjects();
+      }
+    });
+
+    // ✅ Login & Logout
+    loginBtn.onclick = () => { window.location.href = "admin-login.html"; };
+    logoutBtn.onclick = () => {
+      signOut(auth).then(() => {
+        alert("Logged out");
+        window.location.reload();
+      });
+    };
+
+    // ✅ Payment
+    payBtn.onclick = function () {
+      if (!currentUser) {
+        alert("🔐 Please login first to make payment.");
+        return;
+      }
+      const options = {
+        key: "rzp_live_S7e2qEXg0B5vrU",
+        amount: 9900,
+        currency: "INR",
+        name: "NEET PG / INICET PREVIOUSLY ASKED QUESTIONS",
+        description: "Unlock all subjects",
+        handler: async function (response) {
+          alert("✅ Payment successful! ID: " + response.razorpay_payment_id);
+          try {
+            await setDoc(doc(db, "users", userId), { isPaid: true }, { merge: true });
+            isPaid = true;
+            payBtn.style.display = "none";
+            renderSubjects();
+          } catch (err) {
+            console.error("❌ Firestore update failed:", err);
+            alert("Payment done, but failed to unlock. Contact support.");
+          }
+        },
+        theme: { color: "#3399cc" }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    };
+
+    // ✅ Visit Counter
+    async function updateVisitCount() {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const lastVisit = localStorage.getItem("lastVisitDate");
+
+        if (lastVisit !== today) {
+          const docRef = doc(db, "visits", today);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            await updateDoc(docRef, { count: increment(1) });
+          } else {
+            await setDoc(docRef, { count: 1 });
+          }
+          localStorage.setItem("lastVisitDate", today);
+        }
+
+        const docRef = doc(db, "visits", today);
+        onSnapshot(docRef, (snapshot) => {
+          if (snapshot.exists()) {
+            document.getElementById("visitCounter").textContent = snapshot.data().count;
+          }
+        });
+      } catch (error) {
+        console.error("Error updating visits:", error);
+      }
+    }
+    updateVisitCount();
+  </script>
+
+  <!-- Disable Right-click -->
+  <script>
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      alert('Right-click is disabled on this page!');
+    });
+  </script>
+
+  <div id="visitCounter" class="visit-number"></div>
+
+<style>
+  /* 🔹 Visit Counter Styling */
+  .visit-number {
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 20px;
+    opacity: 0;
+    transform: scale(0.9);
+    animation: fadeInScale 1.2s ease forwards, rainbowGlow 4s linear infinite;
+    background: linear-gradient(90deg, #ff0057, #ffae00, #00c6ff, #8e2de2, #ff0057);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes fadeInScale {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes rainbowGlow {
+    0% { filter: drop-shadow(0 0 2px #ff0057); }
+    25% { filter: drop-shadow(0 0 2px #ffae00); }
+    50% { filter: drop-shadow(0 0 2px #00c6ff); }
+    75% { filter: drop-shadow(0 0 2px #8e2de2); }
+    100% { filter: drop-shadow(0 0 2px #ff0057); }
+  }
+</style>
+
+</body>
+</html>

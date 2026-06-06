@@ -1,0 +1,21 @@
+[
+  {"id": "anatomy", "name": "Anatomy", "year": "1st Year"},
+  {"id": "physiology", "name": "Physiology", "year": "1st Year"},
+  {"id": "biochemistry", "name": "Biochemistry", "year": "1st Year"},
+  {"id": "pathology", "name": "Pathology", "year": "2nd Year"},
+  {"id": "pharmacology", "name": "Pharmacology", "year": "2nd Year"},
+  {"id": "microbiology", "name": "Microbiology", "year": "2nd Year"},
+  {"id": "forensic", "name": "Forensic Medicine", "year": "2nd Year"},
+  {"id": "community", "name": "Community Medicine", "year": "3rd Year"},
+  {"id": "ent", "name": "ENT", "year": "3rd Year"},
+  {"id": "ophthalmology", "name": "Ophthalmology", "year": "3rd Year"},
+  {"id": "medicine", "name": "General Medicine", "year": "Final Year"},
+  {"id": "surgery", "name": "General Surgery", "year": "Final Year"},
+  {"id": "obg", "name": "Obstetrics & Gynaecology", "year": "Final Year"},
+  {"id": "pediatrics", "name": "Pediatrics", "year": "Final Year"},
+  {"id": "orthopaedics", "name": "Orthopaedics", "year": "Final Year"},
+  {"id": "dermatology", "name": "Dermatology", "year": "Final Year"},
+  {"id": "psychiatry", "name": "Psychiatry", "year": "Final Year"},
+  {"id": "Radiology", "name": "Radiology", "year": "Final Year"},
+  {"id": "anesthesiology", "name": "Anesthesiology", "year": "Final Year"}
+]

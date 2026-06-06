@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    #admin-section {
+      display: none;
+    }
+    textarea, input, select, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+    .question-item {
+      background: #fff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Admin Login</h2>
+  <div id="login-section">
+    <input id="admin-email" placeholder="Email" type="email" />
+    <input id="admin-password" placeholder="Password" type="password" />
+    <button onclick="adminLogin()">Login with Email</button>
+    <button onclick="loginWithGoogle()">Login with Google</button>
+  </div>
+
+  <div id="admin-section">
+    <h2>Admin Panel - Upload MCQs</h2>
+    <button onclick="logout()">Logout</button>
+    <select id="subject">
+      <option disabled selected>Select Subject</option>
+      <option>Anatomy</option><option>Physiology</option><option>Biochemistry</option>
+      <option>Pathology</option><option>Pharmacology</option><option>Microbiology</option><option>Forensic Medicine</option>
+      <option>Community Medicine</option><option>ENT</option><option>Ophthalmology</option>
+      <option>General Medicine</option><option>General Surgery</option><option>Obstetrics & Gynaecology</option>
+      <option>Pediatrics</option><option>Orthopaedics</option><option>Dermatology</option>
+      <option>Psychiatry</option><option>Radiology</option><option>Anesthesiology</option>
+    </select>
+    <textarea id="question" placeholder="Enter question"></textarea>
+    <input id="opt1" placeholder="Option 1" />
+    <input id="opt2" placeholder="Option 2" />
+    <input id="opt3" placeholder="Option 3" />
+    <input id="opt4" placeholder="Option 4" />
+    <input id="correct" placeholder="Correct option number (0-3)" />
+    <input id="image" placeholder="Image URL (optional)" />
+    <button onclick="uploadQuestion()">Upload Question</button>
+    <button onclick="loadQuestions()">Load All Questions</button>
+    <button onclick="exportQuestions()">Export Questions as JSON</button>
+    <input type="file" id="importFile" />
+    <button onclick="importQuestions()">Import JSON</button>
+    <p id="questionCount"></p>
+    <div id="preview"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      signOut,
+      GoogleAuthProvider
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMNDoNuqkWfXEGYdwueJb5XTr1ST2ztKc",
+      authDomain: "mcqs-96117.firebaseapp.com",
+      projectId: "mcqs-96117",
+      storageBucket: "mcqs-96117.firebasestorage.app",
+      messagingSenderId: "352256319143",
+      appId: "1:352256319143:web:74b2bd062a7f2dc5f1c582",
+      measurementId: "G-6FZ770H045"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.adminLogin = function () {
+      const email = document.getElementById("admin-email").value;
+      const password = document.getElementById("admin-password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then((user) => {
+          if (email === "y3knishu@gmail.com") {
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("admin-section").style.display = "block";
+          } else {
+            alert("❌ Not authorized");
+          }
+        })
+        .catch((err) => alert("Login failed: " + err.message));
+    };
+
+    window.loginWithGoogle = function () {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const email = result.user.email;
+          if (email === "y3knishu@gmail.com") {
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("admin-section").style.display = "block";
+          } else {
+            alert("❌ Not authorized");
+          }
+        })
+        .catch((error) => {
+          alert("Google Sign-In failed: " + error.message);
+        });
+    };
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        alert("Logged out");
+        location.reload();
+      });
+    };
+
+    window.uploadQuestion = async function () {
+      const subject = document.getElementById("subject").value;
+      const question = document.getElementById("question").value;
+      const options = [
+        document.getElementById("opt1").value,
+        document.getElementById("opt2").value,
+        document.getElementById("opt3").value,
+        document.getElementById("opt4").value
+      ];
+      const answer = parseInt(document.getElementById("correct").value);
+      const image = document.getElementById("image").value;
+
+      if (!subject || !question || options.includes("") || isNaN(answer)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      const newQ = { question, options, answer };
+      if (image) newQ.image = image;
+
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+      let existing = [];
+      if (docSnap.exists()) {
+        existing = docSnap.data().questions || [];
+      }
+      existing.push(newQ);
+      await setDoc(docRef, { questions: existing });
+
+      alert("✅ Question uploaded!");
+      document.getElementById("question").value = "";
+      document.getElementById("opt1").value = "";
+      document.getElementById("opt2").value = "";
+      document.getElementById("opt3").value = "";
+      document.getElementById("opt4").value = "";
+      document.getElementById("correct").value = "";
+      document.getElementById("image").value = "";
+    };
+
+    window.loadQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+      const preview = document.getElementById("preview");
+      const countBox = document.getElementById("questionCount");
+      preview.innerHTML = "";
+      countBox.textContent = "";
+
+      if (docSnap.exists()) {
+        const questions = docSnap.data().questions || [];
+        countBox.textContent = `📊 Total Questions: ${questions.length}`;
+        questions.forEach((q, index) => {
+          const div = document.createElement("div");
+          div.className = "question-item";
+          div.innerHTML = `
+            <b>Q${index + 1}:</b> ${q.question}<br/>
+            Options: ${q.options.join(", ")}<br/>
+            Answer: ${q.answer}<br/>
+            ${q.image ? `<img src="${q.image}" />` : ""}
+            <button onclick="deleteQuestion(${index})">Delete</button>
+          `;
+          preview.appendChild(div);
+        });
+      } else {
+        preview.innerHTML = "No questions found.";
+      }
+    };
+
+    window.deleteQuestion = async function (index) {
+      const subject = document.getElementById("subject").value;
+      const docRef = doc(db, "questions", subject);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) return;
+      const questions = docSnap.data().questions;
+      questions.splice(index, 1);
+      await setDoc(docRef, { questions });
+      loadQuestions();
+    };
+
+    window.exportQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      if (!subject) return alert("Select subject");
+
+      const snap = await getDoc(doc(db, "questions", subject));
+      if (!snap.exists()) return alert("No data found");
+
+      const data = snap.data().questions || [];
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${subject}-questions.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    window.importQuestions = async function () {
+      const subject = document.getElementById("subject").value;
+      const input = document.getElementById("importFile");
+      if (!subject || !input.files.length) return alert("Select subject and choose a JSON file");
+
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imported = JSON.parse(e.target.result);
+        const docRef = doc(db, "questions", subject);
+        const docSnap = await getDoc(docRef);
+        let existing = [];
+        if (docSnap.exists()) {
+          existing = docSnap.data().questions || [];
+        }
+        await setDoc(docRef, { questions: [...existing, ...imported] });
+        alert("✅ Imported successfully!");
+        loadQuestions();
+      };
+      reader.readAsText(file);
+    };
+  </script>
+</body>
+</html>
