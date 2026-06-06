@@ -8,7 +8,99 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+/* MOBILE PALETTE BUTTON */
 
+#paletteToggle{
+display:none;
+position:fixed;
+bottom:80px;
+right:15px;
+z-index:9999;
+background:#173a70;
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:50px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+/* MOBILE IMPROVEMENTS */
+
+@media(max-width:900px){
+
+body{
+overflow:auto;
+}
+
+.quiz-container{
+flex-direction:column;
+height:auto;
+}
+
+.main-panel{
+width:100%;
+}
+
+.question-area{
+padding:15px;
+}
+
+.question{
+font-size:18px;
+}
+
+.image{
+max-height:300px;
+}
+
+.options button{
+font-size:17px;
+padding:16px;
+}
+
+.bottom-bar{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+position:sticky;
+bottom:0;
+background:white;
+z-index:999;
+}
+
+.bottom-bar button{
+flex:1;
+min-width:120px;
+}
+
+#paletteToggle{
+display:block;
+}
+
+.right-panel{
+position:fixed;
+top:0;
+right:-100%;
+width:85%;
+height:100%;
+background:white;
+z-index:10000;
+transition:.3s;
+overflow-y:auto;
+box-shadow:-4px 0 12px rgba(0,0,0,.25);
+}
+
+.right-panel.show{
+right:0;
+}
+
+.palette-grid{
+grid-template-columns:repeat(5,1fr);
+}
+
+}
 *{
 margin:0;
 padding:0;
