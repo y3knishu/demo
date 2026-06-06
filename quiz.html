@@ -428,6 +428,25 @@ class="palette-grid">
 </div>
 
 <script type="module" src="app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
 
+const btn =
+document.getElementById("paletteToggle");
+
+if(btn){
+
+btn.addEventListener("click",()=>{
+
+document
+.querySelector(".right-panel")
+.classList.toggle("show");
+
+});
+
+}
+
+});
+</script>
 </body>
 </html>
