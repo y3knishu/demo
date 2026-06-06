@@ -140,7 +140,9 @@ function loadQuestion(index){
   qOptions.innerHTML = "";
 
   expBox.style.display = "none";
-  expTitle.style.display = "none";
+  if(expTitle){
+   expTitle.style.display = "none";
+}
   expText.innerHTML = "";
   expImage.style.display = "none";
 
